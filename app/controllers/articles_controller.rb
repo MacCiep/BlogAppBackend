@@ -2,12 +2,15 @@ class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :delete, :update]
 
   def index
-    @articles = ArticlesSerializer.new(Article.all).serialized_json
-    render(json: @articles, status: :bad_request)
+    options = {
+      include: [:user]
+    }
+    @articles = ArticlesSerializer.new(Article.includes(:user).page(params[:page]), options)
+    render(json: {records: @articles, meta: {total_pages: Article.page(1).total_pages}}, status: :ok)
   end
 
   def show
-    render(json: ArticlesSerializer.new(@article).serialized_json, status: :bad_request)
+    render(json: ArticlesSerializer.new(@article).serialized_json, status: :ok)
   end
 
   def create
