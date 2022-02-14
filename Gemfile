@@ -14,6 +14,7 @@ gem "puma", "~> 5.0"
 
 gem 'devise'
 gem 'devise-jwt'
+gem 'kaminari'
 
 #Serializer
 gem 'fast_jsonapi'
