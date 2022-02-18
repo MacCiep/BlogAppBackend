@@ -5,7 +5,7 @@ class ArticlesController < ApplicationController
     options = {
       include: [:user]
     }
-    @articles = ArticlesSerializer.new(Article.includes(:user).page(params[:page]), options)
+    @articles = ArticlesSerializer.new(Article.filter(params.slice(whitelist_params)).includes(:user).page(params[:page]), options)
     render(json: {records: @articles, meta: {total_pages: Article.page(1).total_pages}}, status: :ok)
   end
 
@@ -45,5 +45,9 @@ class ArticlesController < ApplicationController
 
   def set_article
     @article = Article.find(params[:id])
+  end
+
+  def whitelist_params
+    :with_title
   end
 end
